@@ -9,7 +9,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://heroku_0tlnpxgc:testing123@ds133187.mlab.com:33187/heroku_0tlnpxgc" || "mongodb://localhost/mongoHeadlines";
 mongoose.connect(MONGODB_URI);
 
 app.get("/scrape", function (req, res) {
