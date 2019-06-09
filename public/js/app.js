@@ -1,13 +1,13 @@
 $.getJSON("/articles", function (data) {
     for (var i = 0; i < data.length; i++) {
-        $("#articles").append("<br /> <div class='row article'>"
+        $("#articles").append("<br /><div class='row article'>"
             + "<image class='col-lg-2' src='"
             + data[i].image + "'/>"
             + "<div class='col-lg-8'>"
             + "<h5 class='articleTitle'>"
             + data[i].title
             + "</h5><hr />"
-            + "<p>"
+            + "<p class='summary'>"
             + data[i].summary
             + "</p><br />"
             + "<button type='button' class='btn btn-primary'><a href='"
@@ -21,7 +21,7 @@ $.getJSON("/articles", function (data) {
 });
 
 $(document).on("click", ".btn-success", function () {
-    $("#savedNote").empty();
+    $(".savedNote").empty();
     $("#titleinput").val("");
     $("#bodyinput").val("");
     var thisId = $(this).attr("data-id");
@@ -33,16 +33,14 @@ $(document).on("click", ".btn-success", function () {
         .then(function (data) {
             $("#cheat").text(data._id);
             $(".modal-title").text(data.title);
+            console.log("reached here");
             if (data.note) {
                 console.log(data.note);
-                // for (var i = 0; i < data.note.length; i++) {
-                //     $("#savedNote").append("<p class='savedNoteTitle'>"
-                //         + data[i].note.title
-                //         + "</p><hr /><p>"
-                //         + data[i].note.body
-                //         + "</p>");
-                // }
-            }
+                console.log(data.note.title);
+                console.log(data.note.body);
+                $("#titleinput").val(data.note.title);
+                $("#bodyinput").val(data.note.body);
+            };
         });
 });
 

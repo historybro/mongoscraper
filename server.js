@@ -17,35 +17,68 @@ app.get("/scrape", function (req, res) {
     var $ = cheerio.load(response.data);
 
     $(".stream-article").each(function (i, element) {
-      var result = {};
-      result.title = $(this)
-        .attr("title");
-      result.link = $(this)
-        .attr("href");
-      result.image = $(this)
+      var article = {};
+      
+      article.title = $(this)
+      .attr("title");
+      article.link = $(this)
+      .attr("href");
+      article.image = $(this)
         .children(".image")
         .children("img")
         .attr("src");
-      result.summary = $(this)
-        .children(".meta")
+      article.summary = $(this)
+      .children(".meta")
         .children("p")
-        .text();
-
-      db.Article.create(result)
+        .text();               
+        db.Article.create(article)
         .then(function (dbArticle) {
           console.log(dbArticle);
         })
         .catch(function (err) {
           console.log(err);
         });
-    });
-    console.log("Scrape Complete");
+      });
+
+    // $(".sidebar-price-widget-v2-list-item").each(function (i, element) {
+    //   var price = {};
+    //   price.title = $(this)
+    //     .children(".sidebar-price-widget-v2-list-item__meta")
+    //     .children(".sidebar-price-widget-v2-list-item__name")
+    //     .text();
+    //   price.price = $(this)
+    //     .children(".sidebar-price-widget-v2-list-item__data")
+    //     .children(".sidebar-price-widget-v2-list-item__price")
+    //     .text();
+    //   price.change = $(this)
+    //     .children(".sidebar-price-widget-v2-list-item__data")
+    //     .children(".sidebar-price-widget-v2-list-item__percent sidebar-price-widget-v2-list-item__text--down")
+    //     .text();
+    //   db.Price.create(price)
+    //   .then(function (dbArticle) {
+    //     console.log(dbArticle);
+    //   })
+    //   .catch(function (err) {
+    //     console.log(err);
+    //   });
+    // });
+
     res.send("scrape complete");
   });
 });
 
 app.get("/articles", function (req, res) {
   db.Article.find({})
+    .then(function (dbArticle) {
+      res.json(dbArticle);
+    })
+    .catch(function (err) {
+      res.json(err);
+    });
+});
+
+app.get("/prices", function (req, res) {
+  db.Price.find({})
     .then(function (dbArticle) {
       res.json(dbArticle);
     })

@@ -1,11 +1,10 @@
 var mongoose = require("mongoose");
-
 var Schema = mongoose.Schema;
-
-var PricesSchema = new Schema({
+var PriceSchema = new Schema({
     title: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     price: {
         type: Number,
@@ -16,7 +15,5 @@ var PricesSchema = new Schema({
         required: true
     }
 });
-
-var Prices = mongoose.model("Price", PricesSchema);
-
-module.exports = Prices;
+var Price = mongoose.model("Price", PriceSchema);
+module.exports = Price;
