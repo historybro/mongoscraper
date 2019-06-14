@@ -100,6 +100,7 @@ $(document).on("click", "#artbtn", function () {
         });
       });
     res.send("scrape complete");
+  });
 });
 
 $(document).on("click", "#pricebtn", function () {
@@ -130,6 +131,7 @@ $(document).on("click", "#pricebtn", function () {
     });
 
     res.send("scrape complete");
+  });
 });
 
 
