@@ -15,7 +15,6 @@ mongoose.connect(MONGODB_URI);
 app.get("/scrapearticle", function (req, res) {
   axios.get("https://www.coindesk.com/").then(function (response) {
     var $ = cheerio.load(response.data);
-
     $(".stream-article").each(function (i, element) {
       var article = {};      
       article.title = $(this)
@@ -45,7 +44,6 @@ app.get("/scrapearticle", function (req, res) {
 app.get("/scrapeprice", function (req, res) {
   axios.get("https://www.coindesk.com/").then(function (response) {
     var $ = cheerio.load(response.data);
-
     $(".sidebar-price-widget-v2-list-item").each(function (i, element) {
       var price = {};
       price.title = $(this)
@@ -72,68 +70,6 @@ app.get("/scrapeprice", function (req, res) {
     res.send("scrape complete");
   });
 });
-
-$(document).on("click", "#artbtn", function () {
-  axios.get("https://www.coindesk.com/").then(function (response) {
-    var $ = cheerio.load(response.data);
-
-    $(".stream-article").each(function (i, element) {
-      var article = {};      
-      article.title = $(this)
-      .attr("title");
-      article.link = $(this)
-      .attr("href");
-      article.image = $(this)
-        .children(".image")
-        .children("img")
-        .attr("src");
-      article.summary = $(this)
-      .children(".meta")
-        .children("p")
-        .text();               
-        db.Article.create(article)
-        .then(function (dbArticle) {
-          console.log(dbArticle);
-        })
-        .catch(function (err) {
-          console.log(err);
-        });
-      });
-    res.send("scrape complete");
-  });
-});
-
-$(document).on("click", "#pricebtn", function () {
-  axios.get("https://www.coindesk.com/").then(function (response) {
-    var $ = cheerio.load(response.data);
-
-    $(".sidebar-price-widget-v2-list-item").each(function (i, element) {
-      var price = {};
-      price.title = $(this)
-        .children(".sidebar-price-widget-v2-list-item__meta")
-        .children(".sidebar-price-widget-v2-list-item__name")
-        .text();
-      price.price = $(this)
-        .children(".sidebar-price-widget-v2-list-item__data")
-        .children(".sidebar-price-widget-v2-list-item__price")
-        .text();
-      price.change = $(this)
-        .children(".sidebar-price-widget-v2-list-item__data")
-        .children(".sidebar-price-widget-v2-list-item__percent sidebar-price-widget-v2-list-item__text--down")
-        .text();
-      db.Price.create(price)
-      .then(function (dbArticle) {
-        console.log(dbArticle);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-    });
-
-    res.send("scrape complete");
-  });
-});
-
 
 app.get("/articles", function (req, res) {
   db.Article.find({})
