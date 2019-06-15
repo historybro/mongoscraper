@@ -5,18 +5,16 @@ body {
 	overflow:scroll;
 }
 
-#title {  
-  background: url(../img/shutterstock_578217358-500x300.jpg) no-repeat center;  
-  padding: 3%;
+#navbar {  
+  background: url(../img/shutterstock_578217358-500x300.jpg) no-repeat center;
   background-size: cover;
 }
 
-#titleText, #tt2 {
+#titleText, #tt2, #artbtn, #pricebtn {
   color: antiquewhite;
-  text-shadow: 5px 5px black;
+  text-shadow: 1.5px 1.5px black;
   font-family: 'Press Start 2P', cursive;
   text-align: center;
-  font-size: 200%;
 }
 
 #prices {

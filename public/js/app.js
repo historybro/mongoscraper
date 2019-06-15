@@ -60,3 +60,11 @@ $(document).on("click", "#saveBtn", function () {
     $("#titleinput").val("");
     $("#bodyinput").val("");
 });
+
+$(document).on("click", "#artbtn", function () {
+    location.href = "/scrapearticle";
+});
+
+$(document).on("click", "#pricebtn", function () {
+    location.href = "/scrapeprice";
+});
