@@ -19,6 +19,13 @@ body {
   font-size: 200%;
 }
 
+#artbtn, #pricebtn {
+  color: antiquewhite;
+  text-shadow: 1px 1px black;
+  font-family: 'Press Start 2P', cursive;
+  text-align: center;
+}
+
 #prices {
   background-color: black;
 }
