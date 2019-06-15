@@ -9,7 +9,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://heroku_0tlnpxgc:testing123@ds133187.mlab.com:33187/heroku_0tlnpxgc" || "mongodb://localhost/mongoHeadlines";
+var MONGODB_URI = process.env.MONGODB_URI ||  "mongodb://localhost/mongoHeadlines";
 mongoose.connect(MONGODB_URI);
 
 app.get("/scrape", function (req, res) {
@@ -38,31 +38,30 @@ app.get("/scrape", function (req, res) {
         .catch(function (err) {
           console.log(err);
         });
+    });
+
+    $(".sidebar-price-widget-v2-list-item").each(function (i, element) {
+      var price = {};
+      price.title = $(this)
+        .children(".sidebar-price-widget-v2-list-item__meta")
+        .children(".sidebar-price-widget-v2-list-item__name")
+        .text();
+      price.price = $(this)
+        .children(".sidebar-price-widget-v2-list-item__data")
+        .children(".sidebar-price-widget-v2-list-item__price")
+        .text();
+      price.change = $(this)
+        .children(".sidebar-price-widget-v2-list-item__data")
+        .children(".sidebar-price-widget-v2-list-item__percent sidebar-price-widget-v2-list-item__text--down")
+        .text();
+      db.Price.create(price)
+      .then(function (dbPrice) {
+        console.log(dbPrice);
+      })
+      .catch(function (err) {
+        console.log(err);
       });
-
-    // $(".sidebar-price-widget-v2-list-item").each(function (i, element) {
-    //   var price = {};
-    //   price.title = $(this)
-    //     .children(".sidebar-price-widget-v2-list-item__meta")
-    //     .children(".sidebar-price-widget-v2-list-item__name")
-    //     .text();
-    //   price.price = $(this)
-    //     .children(".sidebar-price-widget-v2-list-item__data")
-    //     .children(".sidebar-price-widget-v2-list-item__price")
-    //     .text();
-    //   price.change = $(this)
-    //     .children(".sidebar-price-widget-v2-list-item__data")
-    //     .children(".sidebar-price-widget-v2-list-item__percent sidebar-price-widget-v2-list-item__text--down")
-    //     .text();
-    //   db.Price.create(price)
-    //   .then(function (dbArticle) {
-    //     console.log(dbArticle);
-    //   })
-    //   .catch(function (err) {
-    //     console.log(err);
-    //   });
-    // });
-
+    });
     res.send("scrape complete");
   });
 });
