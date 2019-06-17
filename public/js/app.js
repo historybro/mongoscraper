@@ -20,7 +20,8 @@ $.getJSON("/articles", function (data) {
             + "<button type='button' class='btn btn-success' data-id='"
             + data[i]._id
             + "'><i class='far fa-sticky-note'></i></button>"
-            + "</div></div></div></div></div>");
+            + "</div></div></div></div></div>"
+        );
     }
 });
 
@@ -38,12 +39,13 @@ $.getJSON("/prices", function (data) {
             + data[i].change
             + " (24h)"
             + "</span>"
-            + "</p></div>");
+            + "</p></div>"
+        );
     }
 });
 
 $(document).on("click", ".btn-success", function () {
-    $(".savedNote").empty();
+    $(".noteTitle").empty();
     $("#titleinput").val("");
     $("#bodyinput").val("");
     var thisId = $(this).attr("data-id");
@@ -55,16 +57,15 @@ $(document).on("click", ".btn-success", function () {
         .then(function (data) {
             $("#cheat").text(data._id);
             $(".modal-title").text(data.title);
-            console.log("reached here");
             if (data.note) {
-                console.log(data.note);
-                console.log(data.note.title);
-                console.log(data.note.body);
-                $("#savedNote").append("<div class='row'>"
-                    + "<p>"
-                    + data.note[i].title)
-                $("#titleinput").val(data.note.title);
-                $("#bodyinput").val(data.note.body);
+                for (var i = 0; i < data.note.length; i++){
+                    $("#savedNote").append("<div class='row'>"
+                        + "<p class='noteTitle'>"
+                        + data.note[i].title)
+                        + "</p>"
+                    $("#titleinput").val(data.note.title);
+                    $("#bodyinput").val(data.note.body);
+                }
             };
         });
 });
@@ -73,7 +74,7 @@ $(document).on("click", "#saveBtn", function () {
     var thisId = $("#cheat").text();
     $.ajax({
         method: "POST",
-        url: "/articles/" + thisId,
+        url: "/notes/" + thisId,
         data: {
             title: $("#titleinput").val(),
             body: $("#bodyinput").val()

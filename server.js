@@ -123,6 +123,35 @@ app.post("/articles/:id", function (req, res) {
     });
 });
 
+app.post("/notes/:id", function (req, res) {
+  db.Note.create(req.body)
+    .then(function (dbNote) {
+      return db.Article.findOneAndUpdate({ _id: req.params.id },
+        { note: dbNote._id },
+        { new: true });
+    })
+    .then(function (dbArticle) {
+      res.json(dbArticle);
+    })
+    .catch(function (err) {
+      res.json(err);
+    });
+});
+
+app.delete("/notes/:id", function (req, res) {
+  db.Note.findByIdAndRemove({ _id: req.params.id })
+    .then(function (dbNote) {
+      return db.Article.findOneAndUpdate({ _id: req.params.id },
+        { note: dbNote._id });
+    })
+    .then(function (dbArticle) {
+      res.json(dbArticle);
+    })
+    .catch(function (err) {
+      res.json(err);
+    });
+});
+
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
 mongoose.connect(MONGODB_URI);
 

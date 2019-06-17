@@ -2,7 +2,10 @@
 
 ## Summary
 
-This website scrapes information from another website and then displays their top articles. It also allows users to add notes to them, by clicking the note (green) button.
+This website scrapes information from other website and then displays their top articles, as well as the top 5 crypto-currency prices. Clicking either the articles or prices links in the navbar will scrape the sites again.
+
+Users can also add notes to them, by clicking the note (green) button.
+Once on the Notes model they can delete previous notes.
 
 
 ### Hosted
