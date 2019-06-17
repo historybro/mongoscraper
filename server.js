@@ -5,96 +5,70 @@ var cheerio = require("cheerio");
 var db = require("./models");
 var PORT = process.env.PORT || 3000;
 var app = express();
+var calls = ("./controller/calls");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-var MONGODB_URI = process.env.MONGODB_URI ||  "mongodb://localhost/mongoHeadlines";
-mongoose.connect(MONGODB_URI);
-
-app.get("/scrapearticle", function (req, res) {
+app.get("/article", function (req, res) {
   axios.get("https://www.coindesk.com/").then(function (response) {
     var $ = cheerio.load(response.data);
     $(".stream-article").each(function (i, element) {
-      var article = {};      
+      var article = {};
       article.title = $(this)
-      .attr("title");
+        .attr("title");
       article.link = $(this)
-      .attr("href");
+        .attr("href");
       article.image = $(this)
         .children(".image")
         .children("img")
         .attr("src");
       article.summary = $(this)
-      .children(".meta")
+        .children(".meta")
         .children("p")
-        .text();               
-        db.Article.create(article)
+        .text();
+      db.Article.create(article)
         .then(function (dbArticle) {
           console.log(dbArticle);
         })
         .catch(function (err) {
           console.log(err);
         });
-      });
-    res.send("scrape complete");
+    });
+    res.redirect("/");
   });
 });
 
-app.get("/scrapeprice", function (req, res) {
-  axios.get("https://www.coindesk.com/").then(function (response) {
+app.get("/price", function (req, res) {
+  axios.get("https://coinmarketcap.com/").then(function (response) {
     var $ = cheerio.load(response.data);
-    $(".sidebar-price-widget-v2-list-item").each(function (i, element) {
-      var price = {};
-      price.title = $(this)
-        .children(".sidebar-price-widget-v2-list-item__meta")
-        .children(".sidebar-price-widget-v2-list-item__name")
+    $("tr").each(function (i, element) {
+      var crypto = {};
+      crypto.title = $(element)
+        .find(".currency-name-container")
         .text();
-      price.price = $(this)
-        .children(".sidebar-price-widget-v2-list-item__data")
-        .children(".sidebar-price-widget-v2-list-item__price")
+      crypto.price = $(element)
+        .find(".price")
         .text();
-      price.change = $(this)
-        .children(".sidebar-price-widget-v2-list-item__data")
-        .children(".sidebar-price-widget-v2-list-item__percent sidebar-price-widget-v2-list-item__text--down")
+      crypto.change = $(element)
+        .find(".percent-change")
         .text();
-      db.Price.create(price)
-      .then(function (dbArticle) {
-        console.log(dbArticle);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
+      db.Price.create(crypto)
+        .then(function (dbArticle) {
+          console.log(dbArticle);
+        })
+        .catch(function (err) {
+          console.log(err);
+        });
+      return i < 5;
     });
-
-    $(".sidebar-price-widget-v2-list-item").each(function (i, element) {
-      var price = {};
-      price.title = $(this)
-        .children(".sidebar-price-widget-v2-list-item__meta")
-        .children(".sidebar-price-widget-v2-list-item__name")
-        .text();
-      price.price = $(this)
-        .children(".sidebar-price-widget-v2-list-item__data")
-        .children(".sidebar-price-widget-v2-list-item__price")
-        .text();
-      price.change = $(this)
-        .children(".sidebar-price-widget-v2-list-item__data")
-        .children(".sidebar-price-widget-v2-list-item__percent sidebar-price-widget-v2-list-item__text--down")
-        .text();
-      db.Price.create(price)
-      .then(function (dbPrice) {
-        console.log(dbPrice);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-    });
-    res.send("scrape complete");
+    res.redirect("/");
   });
 });
 
 app.get("/articles", function (req, res) {
   db.Article.find({})
+    .sort({_id: -1})
     .then(function (dbArticle) {
       res.json(dbArticle);
     })
@@ -105,8 +79,18 @@ app.get("/articles", function (req, res) {
 
 app.get("/prices", function (req, res) {
   db.Price.find({})
-    .then(function (dbArticle) {
-      res.json(dbArticle);
+    .then(function (dbPrice) {
+      res.json(dbPrice);
+    })
+    .catch(function (err) {
+      res.json(err);
+    });
+});
+
+app.get("/notes", function (req, res) {
+  db.Note.find({})
+    .then(function (dbNote) {
+      res.json(dbNote);
     })
     .catch(function (err) {
       res.json(err);
@@ -139,6 +123,10 @@ app.post("/articles/:id", function (req, res) {
     });
 });
 
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+mongoose.connect(MONGODB_URI);
+
 app.listen(PORT, function () {
   console.log("App running on port " + PORT + "!");
+  console.log("http://localhost:" + PORT);
 });

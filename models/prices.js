@@ -7,12 +7,10 @@ var PriceSchema = new Schema({
         unique: true
     },
     price: {
-        type: Number,
-        required: true
+        type: String,
     },
     change: {
-        type: Number,
-        required: true
+        type: String,
     }
 });
 var Price = mongoose.model("Price", PriceSchema);

@@ -1,22 +1,44 @@
 $.getJSON("/articles", function (data) {
     for (var i = 0; i < data.length; i++) {
-        $("#articles").append("<br /><div class='row article'>"
-            + "<image class='col-lg-2' src='"
-            + data[i].image + "'/>"
-            + "<div class='col-lg-8'>"
-            + "<h5 class='articleTitle'>"
+        $("#articles").append("<div class='card'>"
+            + "<div class='card-body'>"
+            + "<h5 class='card-title text-center'>"
             + data[i].title
             + "</h5><hr />"
-            + "<p class='summary'>"
+            + "<div class='row'>"
+            + "<div class='col-lg-4'>"
+            + "<img class='artImg' src='"
+            + data[i].image
+            + "' alt='Card image'></div>"
+            + "<div class='col-lg-8'><p class='card-text'>"
             + data[i].summary
-            + "</p><br />"
+            + "</p>"
+            + "<div class='bdiv'>"
             + "<button type='button' class='btn btn-primary'><a href='"
             + data[i].link
             + "' target='_blank'><i class='fas fa-external-link-alt'></i></a></button>"
             + "<button type='button' class='btn btn-success' data-id='"
             + data[i]._id
             + "'><i class='far fa-sticky-note'></i></button>"
-            + "</div> </div>");
+            + "</div></div></div></div></div>");
+    }
+});
+
+$.getJSON("/prices", function (data) {
+    for (var i = 0; i < data.length; i++) {
+        $("#prices").append("<div class='carousel-item text-center'>"
+            + "<p>"
+            + "<span class='carTit'>"
+            + data[i].title
+            + "</span>"
+            + "<span class='carPri'> "
+            + data[i].price
+            + "</span>"
+            + "<span class='carCha'> "
+            + data[i].change
+            + " (24h)"
+            + "</span>"
+            + "</p></div>");
     }
 });
 
@@ -38,6 +60,9 @@ $(document).on("click", ".btn-success", function () {
                 console.log(data.note);
                 console.log(data.note.title);
                 console.log(data.note.body);
+                $("#savedNote").append("<div class='row'>"
+                    + "<p>"
+                    + data.note[i].title)
                 $("#titleinput").val(data.note.title);
                 $("#bodyinput").val(data.note.body);
             };
@@ -62,9 +87,9 @@ $(document).on("click", "#saveBtn", function () {
 });
 
 $(document).on("click", "#artbtn", function () {
-    location.href = "/scrapearticle";
+    location.href = "/article";
 });
 
 $(document).on("click", "#pricebtn", function () {
-    location.href = "/scrapeprice";
+    location.href = "/price";
 });

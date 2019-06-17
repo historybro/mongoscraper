@@ -17,13 +17,30 @@ body {
   text-align: center;
 }
 
-#prices {
-  background-color: black;
+#tt2 {
+  margin-top: 3%;
 }
 
-#articles {
-  margin-top: 5%;
-  background-color: white;
+#coinCar {
+  background-color: black;
+  color: antiquewhite;
+  /* text-shadow: 1.5px 1.5px gray; */
+  font-family: 'Press Start 2P', cursive;
+  margin-top: 1%;
+  padding-top: 1%; 
+}
+
+.carTit{
+  color: antiquewhite;
+}
+
+.carPri{
+  color: green;
+
+}
+
+.carCha {
+  color: yellow;
 }
 
 .article {
@@ -34,14 +51,18 @@ body {
   margin-left: 2%;
 }
 
-a:link {
+a:link, a:visited, a:hover{
   color: white;
 }
 
-a:visited {
-  color: #0000CC;
+hr {
+  border-color: antiquewhite;
 }
 
-a:hover {
-  color: #0000CC;
+.card {
+  margin-bottom: 2%;
+}
+
+.bdiv {
+  margin-left:80%;
 }
